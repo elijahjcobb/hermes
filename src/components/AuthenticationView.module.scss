@@ -1,0 +1,78 @@
+/*
+ * Elijah Cobb
+ * github.com/elijahjcobb
+ * ejcobb@mtu.edu
+ */
+
+@import "../_variables";
+
+.AuthenticationView {
+	background: $background;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal {
+	background: $gray;
+	padding: 64px 128px;
+	border-radius: 32px;
+	box-shadow: $box-shadow;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+}
+
+.title {
+	font-weight: bold;
+	font-size: 32px;
+	display: block;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	margin: 32px 0;
+	input {
+		min-width: 360px;
+		box-shadow: none;
+		outline: none;
+		border: none;
+		padding: 12px 24px;
+		margin: 16px 0;
+		border-radius: 8px;
+	}
+}
+
+.buttons {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	& > * {
+		outline: none;
+		border: none;
+		background: none;
+		border-radius: 8px;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+}
+
+.mainButton {
+	background: $blue;
+	color: white;
+	padding: 12px 24px;
+	transition: transform 250ms ease-in-out;
+	&:hover {
+		transform: scale(1.125);
+	}
+}
+
+.otherButton {
+	color: $blue;
+}

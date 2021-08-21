@@ -1,0 +1,20 @@
+/*
+ * Elijah Cobb
+ * github.com/elijahjcobb
+ * ejcobb@mtu.edu
+ */
+
+.avatar {
+	width: 72px;
+	height: 72px;
+	background: dodgerblue;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	span {
+		font-weight: bold;
+		font-size: 36px;
+		color: white;
+	}
+}

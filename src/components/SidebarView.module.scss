@@ -1,0 +1,40 @@
+/*
+ * Elijah Cobb
+ * github.com/elijahjcobb
+ * ejcobb@mtu.edu
+ */
+
+@import "../_variables";
+
+.SidebarView {
+	min-width: 480px;
+	width: 480px;
+	height: 100%;
+	padding: 32px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.title {
+	font-weight: bold;
+	font-size: 48px;
+}
+
+.profile {
+	margin: 32px 0;
+	background: $gray;
+	box-shadow: $box-shadow;
+	border-radius: 16px;
+	padding: 32px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.name {
+	font-weight: bold;
+	font-size: 24px;
+	padding: 16px;
+}
