@@ -51,4 +51,8 @@ export class User extends Parse.User<UserProps> {
 		return this.decryptedPrivateKey.decrypt(value);
 	}
 
+	public static async getUserById(userId: string): Promise<User | undefined> {
+		const query = new Parse.Query(User);
+		return await query.get(userId);
+	}
 }

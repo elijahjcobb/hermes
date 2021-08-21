@@ -24,15 +24,18 @@ export interface AppProps {
 	selectedThread: User;
 	threads: Map<User, Message[]>
 	setUser: (value: User) => void;
+	createNewThread: (value: User) => void;
 }
 
 export const AppContext = createContext<Partial<AppProps>>({});
 
 export const App: FC = () => {
 
+	// @ts-ignore
 	const [context, setContext] = useState<Partial<AppProps>>({
 		threads: new Map(),
-		setUser: user => setContext(c => {return {...c, user}})
+		setUser: user => setContext((c: any) => {return {...c, user}}),
+		createNewThread: user => setContext((c: { threads: { set: (arg0: User, arg1: never[]) => any; }; }) => {return {...c, threads: c.threads?.set(user, [])}}),
 	});
 
 	return (<AppContext.Provider value={context}>
