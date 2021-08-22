@@ -9,7 +9,7 @@ import React, {FC, useContext} from "react";
 import styles from "./SidebarView.module.scss";
 import {ThreadsListView} from "./ThreadsListView";
 import {AvatarView} from "./AvatarView";
-import {AppContext} from "../App";
+import {useStoreSelector} from "../data/Store";
 
 export interface SidebarViewProps {
 
@@ -17,7 +17,7 @@ export interface SidebarViewProps {
 
 export const SidebarView: FC<SidebarViewProps> = () => {
 
-	const context = useContext(AppContext);
+	const context = useStoreSelector(s => s.user);
 	if (!context.user) throw new Error("No user even though showing sidebar.");
 	const user = context.user;
 

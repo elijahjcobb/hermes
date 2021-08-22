@@ -5,12 +5,13 @@
  * github.com/elijahjcobb
  */
 
-import React, {FC, useContext, useState} from "react";
+import React, {FC, useState} from "react";
 import styles from "./AuthenticationView.module.scss";
 import {Crypto} from "../crypto";
 import {User} from "../data/User";
-import {AppContext} from "../App";
 import * as Parse from "parse";
+import {useStoreDispatch} from "../data/Store";
+import {userSliceActions} from "../data/slices/user";
 
 export const AuthenticationSignInView: FC<{
 	username: string;
@@ -50,7 +51,7 @@ export const AuthenticationView: FC = () => {
 	const [password, setPassword] = useState("");
 	const [isSignIn, setIsSignIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const context = useContext(AppContext);
+	const dispatch = useStoreDispatch();
 
 	function handleSignUp(): void {
 		setIsLoading(true);
@@ -69,7 +70,7 @@ export const AuthenticationView: FC = () => {
 			newUser.setUsername(username);
 			newUser.setPassword(password);
 			await newUser.signUp();
-			if (context.setUser) context.setUser(newUser);
+			dispatch(userSliceActions.setUser(newUser));
 		})().catch(console.error);
 	}
 
@@ -79,7 +80,7 @@ export const AuthenticationView: FC = () => {
 			await Parse.User.logOut();
 			const user = await User.logIn<User>(username, password);
 			await user.decryptPrivateKey(password);
-			if (context.setUser) context.setUser(user);
+			dispatch(userSliceActions.setUser(user));
 		})().catch(console.error);
 	}
 

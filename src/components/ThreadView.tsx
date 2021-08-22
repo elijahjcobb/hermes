@@ -5,12 +5,11 @@
  * github.com/elijahjcobb
  */
 
-import React, {FC, useContext, useState} from "react";
+import React, {FC, useState} from "react";
 import {MessageView} from "./MessageView";
 import {User} from "../data/User";
-import {Message} from "../data/Message";
 import styles from "./ThreadView.module.scss";
-import {AppContext} from "../App";
+import {useStoreSelector} from "../data/Store";
 
 export interface ThreadProps {
 	user: User;
@@ -19,8 +18,8 @@ export interface ThreadProps {
 export const ThreadView: FC<ThreadProps> = props => {
 
 	const [message, setMessage] = useState("");
-	const threads = useContext(AppContext).threads;
-	const messages = threads?.get(props.user) ?? [];
+	const threads = useStoreSelector(s => s.threads.threads)
+	const messages = threads[props.user.id] ?? [];
 
 	function handleOnCreateNewMessage(): void {
 		setMessage("");

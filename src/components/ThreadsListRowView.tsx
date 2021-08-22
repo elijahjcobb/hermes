@@ -5,12 +5,11 @@
  * github.com/elijahjcobb
  */
 
-import React, {FC, useContext} from "react";
+import React, {FC} from "react";
 import styles from "./ThreadsListRowView.module.scss";
 import {User} from "../data/User";
 import {AvatarView} from "./AvatarView";
-import {AppContext} from "../App";
-
+import {useStoreSelector} from "../data/Store";
 export interface ThreadsListRowViewProps {
 	user: User;
 	onClick?: () => void;
@@ -18,7 +17,7 @@ export interface ThreadsListRowViewProps {
 
 export const ThreadsListRowView: FC<ThreadsListRowViewProps> = props => {
 
-	const context = useContext(AppContext);
+	const context = useStoreSelector(s => s.threads);
 	const isSelected = context.selectedThread?.id === props.user.id && context.selectedThread?.id !== undefined;
 
 	return (<div onClick={props.onClick} className={styles.ThreadsListRowView + " " + (isSelected ? styles.selected : "")}>

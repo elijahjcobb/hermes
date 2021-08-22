@@ -5,11 +5,11 @@
  * github.com/elijahjcobb
  */
 
-import React, {FC, useContext} from "react";
+import React, {FC} from "react";
 import {Message} from "../data/Message";
 import styles from "./MessageView.module.scss";
-import {AppContext} from "../App";
 import {AvatarView} from "./AvatarView";
+import {useStoreSelector} from "../data/Store";
 
 export interface MessageProps {
 	message: Message;
@@ -17,8 +17,8 @@ export interface MessageProps {
 
 export const MessageView: FC<MessageProps> = props => {
 
+	const context = useStoreSelector(s => s.user);
 	const user = props.message.get("sender");
-	const context = useContext(AppContext);
 	const isSender = context.user?.id === props.message.id;
 
 	function getMessage(): string {
