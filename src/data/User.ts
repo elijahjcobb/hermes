@@ -42,7 +42,7 @@ export class User extends Parse.User<UserProps> {
 	}
 
 	public async encrypt(value: string): Promise<string> {
-		if (!this.publicKey) throw new Error("Tried to encrypt a message before public key is configured.");
+		if (!this.publicKey) this.publicKey = await Crypto.publicKeyFromString(this.get("publicKey"));
 		return this.publicKey.encrypt(value);
 	}
 

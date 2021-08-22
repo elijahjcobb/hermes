@@ -27,8 +27,8 @@ export const ThreadView: FC<ThreadProps> = props => {
 	useEffect(() => {
 		if (!context.user) throw new Error("Trying to send message but not signed in.");
 		const q = new Parse.Query<Message>(Message);
-		q.equalTo("sender", context.user);
-		q.equalTo("receiver", props.user);
+		q.containedIn("sender", [props.user, context.user]);
+		q.containedIn("receiver", [props.user, context.user]);
 		q.subscribe().then(s => {
 
 			s.on("open", () => {
@@ -42,27 +42,36 @@ export const ThreadView: FC<ThreadProps> = props => {
 			})
 
 			s.on("create", msg => {
-				console.log(msg);
-				//@ts-ignore
-				context.addMessage(msg, props.user);
+				console.log("create", msg);
+				(async () => {
+					console.log(msg);
+					if (!context.user) throw new Error("User not signed in.");
+					const value = await context.user.decrypt(msg.get("value"));
+					msg.set("value", value);
+					//@ts-ignore
+					context.addMessage(msg, props.user);
+				})().catch(console.error)
 			});
 
 		});
 	}, []);
 
 	function handleOnCreateMessage() {
-		if (!context.user) throw new Error("Trying to send message but not signed in.");
-		const newMessage = new Message({
-			value: message,
-			sender: context.user,
-			receiver: props.user
-		});
-		console.log("Will save message.");
-		newMessage.save().then(msg => {
-			console.log("Did save message. " + msg.id);
-			context.addMessage(msg, props.user);
+		(async () => {
+			if (!context.user) throw new Error("Trying to send message but not signed in.");
+			const msg = await props.user.encrypt(message);
+			const newMessage = new Message({
+				value: msg,
+				sender: context.user,
+				receiver: props.user
+			});
+			console.log("Will save message.");
+			await newMessage.save();
+			newMessage.set("value", message);
+			console.log("Did save message. " + newMessage.id);
+			context.addMessage(newMessage, props.user);
 			setMessage("");
-		}).catch(console.error);
+		})().catch(console.error);
 	}
 
 	return (<div className={styles.ThreadView}>
