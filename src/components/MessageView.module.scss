@@ -23,6 +23,8 @@
 .message {
 	padding: 16px;
 	background: $black;
+	overflow: hidden;
+	text-align: left;
 	color: white;
 	border-radius: 16px;
 	max-width: 60%;

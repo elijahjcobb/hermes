@@ -10,8 +10,7 @@ import styles from "./AuthenticationView.module.scss";
 import {Crypto} from "../crypto";
 import {User} from "../data/User";
 import * as Parse from "parse";
-import {useStoreDispatch} from "../data/Store";
-import {userSliceActions} from "../data/slices/user";
+import {useAppContext} from "../App";
 
 export const AuthenticationSignInView: FC<{
 	username: string;
@@ -51,7 +50,7 @@ export const AuthenticationView: FC = () => {
 	const [password, setPassword] = useState("");
 	const [isSignIn, setIsSignIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const dispatch = useStoreDispatch();
+	const context = useAppContext();
 
 	function handleSignUp(): void {
 		setIsLoading(true);
@@ -70,7 +69,7 @@ export const AuthenticationView: FC = () => {
 			newUser.setUsername(username);
 			newUser.setPassword(password);
 			await newUser.signUp();
-			dispatch(userSliceActions.setUser(newUser));
+			context.setUser(newUser);
 		})().catch(console.error);
 	}
 
@@ -80,7 +79,7 @@ export const AuthenticationView: FC = () => {
 			await Parse.User.logOut();
 			const user = await User.logIn<User>(username, password);
 			await user.decryptPrivateKey(password);
-			dispatch(userSliceActions.setUser(user));
+			context.setUser(user);
 		})().catch(console.error);
 	}
 

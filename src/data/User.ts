@@ -63,3 +63,5 @@ export class User extends Parse.User<UserProps> {
 		return await query.get(userId);
 	}
 }
+
+Parse.Object.registerSubclass("_User", User);

@@ -21,3 +21,5 @@ export class Message extends Parse.Object<MessageProps> {
 	}
 
 }
+
+Parse.Object.registerSubclass("Message", Message);
