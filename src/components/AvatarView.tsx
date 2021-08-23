@@ -5,13 +5,15 @@
  * github.com/elijahjcobb
  */
 
-import React, {FC} from "react";
+import React, {FC, useRef} from "react";
 import styles from "./AvatarView.module.scss";
 
 export interface AvatarViewProps {
 	name: string;
 	size?: number;
+	colour?: string;
 }
+
 
 export const AvatarView: FC<AvatarViewProps> = props => {
 
@@ -20,11 +22,12 @@ export const AvatarView: FC<AvatarViewProps> = props => {
 	return (<div className={styles.avatar} style={{
 		width: size,
 		height: size,
-		minWidth: size
+		minWidth: size,
+		background: props.colour ?? "dodgerblue"
 	}}>
 		<span style={{
 			fontSize: size * 0.4
-		}}>{props.name}</span>
+		}}>{props.name.toUpperCase()}</span>
 	</div>);
 
 }

@@ -24,6 +24,7 @@
 	overflow-y: auto;
 	padding-right: $scroll;
 	margin-right: -$scroll;
+	scroll-behavior: smooth;
 }
 
 .inputView {

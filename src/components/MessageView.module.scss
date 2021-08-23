@@ -11,6 +11,9 @@
 	align-items: flex-start;
 	justify-content: flex-end;
 	padding: 16px;
+	cursor: pointer;
+	user-select: none;
+
 }
 
 .main {
@@ -18,19 +21,26 @@
 	flex-direction: column;
 	justify-content: center;
 	margin: 0 16px;
+	transition: all 250ms ease-in-out;
 }
 
 .message {
 	padding: 16px;
-	background: $black;
-	overflow: hidden;
-	text-align: left;
 	color: white;
 	border-radius: 16px;
-	max-width: 60%;
+	display: block;
+	white-space: pre;
+	transition: all 250ms ease-in-out;
+	&:hover {
+		transform: scale(1.0025) rotate(-3deg);
+		box-shadow: 0 0 20px lightgray;
+	}
 }
 
 .time {
 	font-weight: lighter;
 	padding-top: 4px;
+	display: block;
+	overflow: hidden;
+	transition: height 250ms ease-in-out;
 }
