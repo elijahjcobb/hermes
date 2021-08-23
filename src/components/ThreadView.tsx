@@ -5,7 +5,7 @@
  * github.com/elijahjcobb
  */
 
-import React, {FC, useCallback, useContext, useEffect, useState} from "react";
+import React, {FC, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {MessageView} from "./MessageView";
 import {User} from "../data/User";
 import styles from "./ThreadView.module.scss";
@@ -17,12 +17,26 @@ export interface ThreadProps {
 	user: User;
 }
 
+function randomColor(): string {
+	let colors = [
+		"red",
+		"dodgerblue",
+		"orange",
+		"green",
+		"pink",
+		"purple"
+	]
+	return colors[Math.floor(Math.random() * colors.length)];
+}
+
+
 export const ThreadView: FC<ThreadProps> = props => {
 
 	const [message, setMessage] = useState("");
 	const [connected, setConnected] = useState(false);
 	const context = useAppContext();
 	const messages = context.store[props.user.id];
+	const theme = useRef(randomColor());
 
 	useEffect(() => {
 		if (!context.user) throw new Error("Trying to send message but not signed in.");
@@ -74,10 +88,17 @@ export const ThreadView: FC<ThreadProps> = props => {
 		})().catch(console.error);
 	}
 
+	const messageList = useRef<HTMLDivElement | null>(null)
+	useEffect(() => {
+		const list = messageList.current;
+		if (!list) return;
+		list.scrollTop = list.scrollHeight;
+	}, [messages.messages])
+
 	return (<div className={styles.ThreadView}>
-		<div className={styles.thread}>
+		<div className={styles.thread} ref={messageList}>
 			{messages.messages.map((message, i) => {
-				return <MessageView message={message} key={i}/>
+				return <MessageView avatarColors={theme.current} message={message} key={i}/>
 			})}
 		</div>
 		<div className={styles.inputView}>
@@ -85,6 +106,7 @@ export const ThreadView: FC<ThreadProps> = props => {
 				onKeyDown={e => {
 					if (e.key === "Enter") {
 						e.preventDefault();
+						if (message.trim() === "") return;
 						handleOnCreateMessage();
 					}
 				}}

@@ -5,7 +5,7 @@
  * github.com/elijahjcobb
  */
 
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import styles from "./AuthenticationView.module.scss";
 import {Crypto} from "../crypto";
 import {User} from "../data/User";
@@ -50,7 +50,12 @@ export const AuthenticationView: FC = () => {
 	const [password, setPassword] = useState("");
 	const [isSignIn, setIsSignIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [warningMessg, setWarninMessg] = useState<string|undefined>(undefined);
 	const context = useAppContext();
+
+	useEffect(() => {
+		setWarninMessg(undefined)
+	}, [firstName, lastName, username, password, isSignIn])
 
 	function handleSignUp(): void {
 		setIsLoading(true);
@@ -70,7 +75,11 @@ export const AuthenticationView: FC = () => {
 			newUser.setPassword(password);
 			await newUser.signUp();
 			context.setUser(newUser);
-		})().catch(console.error);
+		})().catch(e => {
+			console.error(e)
+			setIsLoading(false);
+			setWarninMessg("Failed to sign up, check console...")
+		});
 	}
 
 	function handleSignIn(): void {
@@ -80,12 +89,16 @@ export const AuthenticationView: FC = () => {
 			const user = await User.logIn<User>(username, password);
 			await user.decryptPrivateKey(password);
 			context.setUser(user);
-		})().catch(console.error);
+		})().catch(e => {
+			console.error(e)
+			setIsLoading(false);
+			setWarninMessg("Incorrect Credential.")
+		});
 	}
 
 	return (<div className={styles.AuthenticationView}>
-		{!isLoading && <div className={styles.modal}>
-            <span className={styles.title}>hermes</span>
+		<div className={styles.modal}>
+			<span className={styles.title}>hermes</span>
 			{isSignIn ? <AuthenticationSignInView
 				username={username}
 				password={password}
@@ -101,12 +114,12 @@ export const AuthenticationView: FC = () => {
 				setUsername={setUsername}
 				setPassword={setPassword}
 			/>}
-            <div className={styles.buttons}>
-                <button onClick={() => setIsSignIn(v => !v)} className={styles.otherButton}>or Sign {isSignIn ? "Up" : "In"}</button>
-                <button onClick={isSignIn ? handleSignIn : handleSignUp} className={styles.mainButton}>Sign {isSignIn ? "In" : " Up"}</button>
-            </div>
-        </div>}
-		{isLoading && <span>Loading...</span>}
+			{warningMessg && <span className={styles.warningLabel}>{warningMessg}</span>}
+			<div className={styles.buttons}>
+				<button onClick={() => setIsSignIn(v => !v)} className={styles.otherButton}>or Sign {isSignIn ? "Up" : "In"}</button>
+				<button onClick={isSignIn ? handleSignIn : handleSignUp} disabled={isLoading} className={styles.mainButton}>Sign {isSignIn ? "In" : " Up"}</button>
+			</div>
+		</div>
 	</div>);
 
 }
